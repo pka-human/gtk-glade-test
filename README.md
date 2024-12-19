@@ -17,5 +17,5 @@ rm -r build bin
 
 Run:
 ```bash
-./bin/gtk-test
+./bin/gtk-glade-test
 ```
