@@ -1,4 +1,4 @@
-# gtk-test
+# gtk-glade-test
 
 Build with CLANG (***recommended***):
 ```bash
