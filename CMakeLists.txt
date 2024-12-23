@@ -66,4 +66,8 @@ list(APPEND SOURCES ${RESOURCE_C})
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${GTK_LIBRARIES})
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} ${GTK_LIBRARIES} -mwindows)
+else()
+    target_link_libraries(${PROJECT_NAME} ${GTK_LIBRARIES})
+endif()
