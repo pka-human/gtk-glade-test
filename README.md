@@ -1,5 +1,7 @@
 # gtk-glade-test
 
+![screenshot](screenshot.png)
+
 Build with CLANG (***recommended***):
 ```bash
 export CC=clang && export CXX=clang++ && cmake -S . -B build && cmake --build build
