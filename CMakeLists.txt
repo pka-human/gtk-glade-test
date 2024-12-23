@@ -66,4 +66,10 @@ list(APPEND SOURCES ${RESOURCE_C})
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${GTK_LIBRARIES})
+if(WIN32)
+    add_executable("${PROJECT_NAME}-console" ${SOURCES})
+    target_link_libraries(${PROJECT_NAME} ${GTK_LIBRARIES} -mwindows)
+    target_link_libraries("${PROJECT_NAME}-console" ${GTK_LIBRARIES})
+else()
+    target_link_libraries(${PROJECT_NAME} ${GTK_LIBRARIES})
+endif()
