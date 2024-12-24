@@ -14,55 +14,59 @@ include_directories(${GTK_INCLUDE_DIRS})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/src/res")
-set(RESOURCE_BINARY_DIR "${CMAKE_BINARY_DIR}/src/res")
-set(RESOURCE_XML "${RESOURCE_BINARY_DIR}/resource.xml")
-set(RESOURCE_C "${RESOURCE_BINARY_DIR}/resource.c")
+set(GRESOURCE_DIR_NAME "gres")
+set(GRESOURCE_XML_NAME "gresource.xml")
+set(GRESOURCE_C_NAME "gresource.c")
 
-file(GLOB_RECURSE RESOURCES "${RESOURCE_DIR}/*")
+set(GRESOURCE_DIR "${CMAKE_SOURCE_DIR}/${GRESOURCE_DIR_NAME}")
+set(GRESOURCE_BINARY_DIR "${CMAKE_BINARY_DIR}/${GRESOURCE_DIR_NAME}")
+set(GRESOURCE_XML "${GRESOURCE_BINARY_DIR}/${GRESOURCE_XML_NAME}")
+set(GRESOURCE_C "${GRESOURCE_BINARY_DIR}/${GRESOURCE_C_NAME}")
+
+file(GLOB_RECURSE RESOURCES "${GRESOURCE_DIR}/*")
 
 set(NEW_CONTENT "")
 foreach(RESOURCE ${RESOURCES})
     get_filename_component(RELATIVE_PATH ${RESOURCE} NAME)
-    string(REPLACE "${RESOURCE_DIR}/" "" RELATIVE_PATH "${RESOURCE}")
+    string(REPLACE "${GRESOURCE_DIR}/" "" RELATIVE_PATH "${RESOURCE}")
     if (NOT ${RELATIVE_PATH} STREQUAL "resource.c")
         set(NEW_CONTENT "${NEW_CONTENT}<file>${RELATIVE_PATH}</file>")
     endif()
 endforeach()
 
-if(EXISTS ${RESOURCE_XML})
-    file(READ ${RESOURCE_XML} CURRENT_CONTENT)
+if(EXISTS ${GRESOURCE_XML})
+    file(READ ${GRESOURCE_XML} CURRENT_CONTENT)
 else()
     set(CURRENT_CONTENT "")
 endif()
 
 if(NOT CURRENT_CONTENT STREQUAL "<gresources><gresource>${NEW_CONTENT}</gresource></gresources>")
-    message(STATUS "Generating resource.xml...")
+    message(STATUS "Generating gresource.xml...")
 
-    if(EXISTS ${RESOURCE_BINARY_DIR})
-        file(REMOVE_RECURSE ${RESOURCE_BINARY_DIR})
+    if(EXISTS ${GRESOURCE_BINARY_DIR})
+        file(REMOVE_RECURSE ${GRESOURCE_BINARY_DIR})
     endif()
-    file(MAKE_DIRECTORY ${RESOURCE_BINARY_DIR})
+    file(MAKE_DIRECTORY ${GRESOURCE_BINARY_DIR})
 
-    file(WRITE ${RESOURCE_XML} "<gresources><gresource>")
-    file(APPEND ${RESOURCE_XML} "${NEW_CONTENT}")
-    file(APPEND ${RESOURCE_XML} "</gresource></gresources>")
+    file(WRITE ${GRESOURCE_XML} "<gresources><gresource>")
+    file(APPEND ${GRESOURCE_XML} "${NEW_CONTENT}")
+    file(APPEND ${GRESOURCE_XML} "</gresource></gresources>")
 endif()
 
-message(STATUS "Copying current resources...")
-file(COPY ${RESOURCE_DIR} DESTINATION "${RESOURCE_BINARY_DIR}/..")
+message(STATUS "Copying current gresources...")
+file(COPY ${GRESOURCE_DIR} DESTINATION "${GRESOURCE_BINARY_DIR}/..")
 
 add_custom_command(
-    OUTPUT ${RESOURCE_C}
-    COMMAND ${GLIB_COMPILE_RESOURCES} --sourcedir=${RESOURCE_BINARY_DIR} --generate-source --target=${RESOURCE_C} ${RESOURCE_XML}
-    DEPENDS ${RESOURCE_XML} ${RESOURCES}
-    COMMENT "Generating resource.c from resource.xml"
+    OUTPUT ${GRESOURCE_C}
+    COMMAND ${GLIB_COMPILE_RESOURCES} --sourcedir="${GRESOURCE_DIR_NAME}" --generate-source --target="${GRESOURCE_DIR_NAME}/${GRESOURCE_C_NAME}" "${GRESOURCE_DIR_NAME}/${GRESOURCE_XML_NAME}"
+    DEPENDS ${GRESOURCE_XML} ${RESOURCES}
+    COMMENT "Generating gresource.c from gresource.xml"
 )
 
-add_custom_target(GenerateResources DEPENDS ${RESOURCE_C})
+add_custom_target(GenerateResources DEPENDS ${GRESOURCE_C})
 
-file(GLOB SOURCES "src/*.c")
-list(APPEND SOURCES ${RESOURCE_C})
+file(GLOB_RECURSE SOURCES "src/*.c")
+list(APPEND SOURCES ${GRESOURCE_C})
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 

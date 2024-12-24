@@ -10,7 +10,9 @@ void on_button1_clicked(GtkButton *b) {
     gdouble value1 = gtk_adjustment_get_value(adjustment1);
     gdouble value2 = gtk_adjustment_get_value(adjustment2);
 
-    gchar *result_text = g_strdup_printf("%d + %d = %d", (int)value1, (int)value2, (int)(value1 + value2));
+    const gchar *current_text = gtk_label_get_text(GTK_LABEL(label1));
+    gchar *result_text = g_strdup_printf("%s%d + %d = %d\n", current_text, (int)value1, (int)value2, (int)(value1 + value2));
+
     gtk_label_set_text(GTK_LABEL(label1), result_text);
     g_free(result_text);
 }
