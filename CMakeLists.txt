@@ -14,7 +14,7 @@ include_directories(${GTK_INCLUDE_DIRS})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-set(GRESOURCE_DIR_NAME "gres")
+set(GRESOURCE_DIR_NAME "g_res")
 set(GRESOURCE_XML_NAME "gresource.xml")
 set(GRESOURCE_C_NAME "gresource.c")
 
