@@ -4,6 +4,7 @@ project(gtk-glade-test)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Os")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s -Wl,--gc-sections")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED gtk+-3.0)
@@ -11,8 +12,6 @@ pkg_check_modules(GTK REQUIRED gtk+-3.0)
 find_program(GLIB_COMPILE_RESOURCES NAMES glib-compile-resources REQUIRED)
 
 include_directories(${GTK_INCLUDE_DIRS})
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 set(GRESOURCE_DIR_NAME "g_res")
 set(GRESOURCE_XML_NAME "gresource.xml")
